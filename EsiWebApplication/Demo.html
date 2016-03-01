@@ -4,6 +4,8 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>TypeScript Map demo</title>
     <link rel="stylesheet" href="http://js.arcgis.com/3.15/esri/css/esri.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.15/dijit/themes/claro/claro.css">
+
     <style>
         html, body, #mapDiv {
             padding: 0;
@@ -11,31 +13,8 @@
             height: 100%;
         }
 
-        #padding {
-            z-index: 99;
-            position: absolute;
-            top: 0;
-            right: 0;
-            height: 100%;
-            visibility: hidden;
-        }
+      
 
-        .vertical-center {
-            position: relative;
-            top: 50%;
-            transform: translateY(-50%);
-            -webkit-transform: translateY(-50%);
-        }
-
-        #textbackground {
-            height: 80%;
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        #text {
-            color: white;
-            padding: 3%;
-        }
     </style>
     <script src="http://js.arcgis.com/3.15/"></script>
     <script>
@@ -44,29 +23,72 @@
                 name: "CalAgMap",
                 location: "/CalAgMap/"
             }]
-        }, ["CalAgMap", "dojo/domReady!"], function (demo) {
+        }, ["CalAgMap",
+            "dojo/domReady!",
+            "dojo/_base/array", "dojo/parser",
+            "dijit/layout/AccordionContainer",
+            "dijit/layout/ContentPane",
+            "dijit/layout/BorderContainer"
+        ], function (demo, domready, array, parser) {
+            parser.parse();
             console.log("demo started");
-
         });
     </script>
 </head>
-<body>
-    <div id="mapDiv">
-       
+<body class="claro">
+    <div id="content"
+         data-dojo-type="dijit/layout/BorderContainer"
+         data-dojo-props="design:'headline', gutters:false"
+         style="width: 100%; height: 100%; margin: 0;">
 
-    </div>
+        <div style="position:absolute; right:10px; top:10px; z-Index:999; width:300px">
+            <div data-dojo-type="dijit/TitlePane"
+                 data-dojo-props="title:'Toolbox', closable:true, open:false">
 
-    <div id="padding">
-        <div id="textbackground" class="vertical-center">
-            <div id="text">
-                <h1>CalPEATS</h1>
-                <p>This is where the accordian conrol will be.</p>
-                <p>Try to resize the window to get a better understanding.</p>
-                <span id="layerToggle">
-                    <input type="checkbox" id="streetsLyr" checked>Basemap
-                </span>
+                <div id="rightPane"
+                     data-dojo-type="dijit/layout/ContentPane"
+                     data-dojo-props="region:'right'">
+
+                    <div data-dojo-type="dijit/layout/AccordionContainer">
+                        <div data-dojo-type="dijit/layout/ContentPane" id="legendPane"
+                             data-dojo-props="title:'Legend', selected:true">
+                            <div id="legendDiv"></div>
+                           
+                        </div>
+                        <div data-dojo-type="dijit/layout/ContentPane"
+                             data-dojo-props="title:'Tools'">
+                            This pane could contain tools or additional content
+                        </div>
+                        <div data-dojo-type="dijit/layout/ContentPane"
+                             data-dojo-props="title:'Search'">
+                            This pane could contain tools or additional content
+                        </div>
+                        <div data-dojo-type="dijit/layout/ContentPane"
+                             data-dojo-props="title:'Buffer'">
+                            This pane could contain tools or additional content
+                        </div>
+                        <div data-dojo-type="dijit/layout/ContentPane"
+                             data-dojo-props="title:'Annotation'">
+                            This pane could contain tools or additional content
+                        </div>
+                        <div data-dojo-type="dijit/layout/ContentPane"
+                             data-dojo-props="title:'Layers'">
+                            This pane could contain tools or additional content
+                        </div>
+                        <div data-dojo-type="dijit/layout/ContentPane"
+                             data-dojo-props="title:'Colours'">
+                            This pane could contain tools or additional content
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        <div id="mapDiv"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'center'"
+             style="overflow:hidden;">
+        </div>
     </div>
+
 </body>
 </html>
