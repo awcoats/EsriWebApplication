@@ -1,0 +1,72 @@
+﻿<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>TypeScript Map demo</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.15/esri/css/esri.css">
+    <style>
+        html, body, #mapDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+        }
+
+        #padding {
+            z-index: 99;
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            visibility: hidden;
+        }
+
+        .vertical-center {
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            -webkit-transform: translateY(-50%);
+        }
+
+        #textbackground {
+            height: 80%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        #text {
+            color: white;
+            padding: 3%;
+        }
+    </style>
+    <script src="http://js.arcgis.com/3.15/"></script>
+    <script>
+        require({
+            packages: [{
+                name: "CalAgMap",
+                location: "/CalAgMap/"
+            }]
+        }, ["CalAgMap", "dojo/domReady!"], function (demo) {
+            console.log("demo started");
+
+        });
+    </script>
+</head>
+<body>
+    <div id="mapDiv">
+       
+
+    </div>
+
+    <div id="padding">
+        <div id="textbackground" class="vertical-center">
+            <div id="text">
+                <h1>CalPEATS</h1>
+                <p>This is where the accordian conrol will be.</p>
+                <p>Try to resize the window to get a better understanding.</p>
+                <span id="layerToggle">
+                    <input type="checkbox" id="streetsLyr" checked>Basemap
+                </span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
