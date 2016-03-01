@@ -30,6 +30,7 @@
             "dijit/layout/BorderContainer"
         ], function (demo, domready, array, parser) {
             parser.parse();
+           
             console.log("demo started");
         });
     </script>
@@ -61,7 +62,18 @@
                             </div>
                             <div data-dojo-type="dijit/layout/ContentPane"
                                  data-dojo-props="title:'Graphics'">
-                                This pane could contain tools or additional content
+                                <button data-dojo-type="dijit/form/Button">Point</button>
+                                <button data-dojo-type="dijit/form/Button">Multi Point</button>
+                                <button data-dojo-type="dijit/form/Button">Line</button>
+                                <button data-dojo-type="dijit/form/Button">Polyline</button>
+                                <button data-dojo-type="dijit/form/Button">Polygon</button>
+                                <button data-dojo-type="dijit/form/Button">Freehand Polyline</button>
+                                <button data-dojo-type="dijit/form/Button">Freehand Polygon</button>
+
+                                <button data-dojo-type="dijit/form/Button">Arrow</button>
+                                <button data-dojo-type="dijit/form/Button">Triangle</button>
+                                <button data-dojo-type="dijit/form/Button">Circle</button>
+                                <button data-dojo-type="dijit/form/Button">Ellipse</button>
                                 
                             </div>
                             <div data-dojo-type="dijit/layout/ContentPane"

@@ -21,13 +21,13 @@ export = MapController;
 
 class MapController {
     map: Map;
+    toolbar: Draw;
 
     constructor(public mapDiv: string) {
     }
 
     start() {
         var point = new Point(-122.45, 37.75); // long, lat
-       
         var mapOptions: esri.MapOptions = {};
         mapOptions.basemap = "topo";
         mapOptions.center = point;
@@ -37,8 +37,54 @@ class MapController {
 
         this.addScaleBar();
         this.addBasemapGallery();
-      
+        //this.map.on("load", this.addGraphics);
+        //this.addGraphics();
+        this.createToolbar();
+
+        this.activateTool();
+        // loop through all dijits, connect onClick event
+        // listeners for buttons to activate drawing tools
+        //registry.forEach(function (d) {
+        //    // d is a reference to a dijit
+        //    // could be a layout container or a button
+        //    if (d.declaredClass === "dijit.form.Button") {
+        //        d.on("click", this.activateTool);
+        //    }
+        //});
+        //dom.byId("result2").
     }
+
+    private activateTool() {
+       // var tool = this.label.toUpperCase().replace(/ /g, "_");
+        this.toolbar.activate(Draw["POLYLINE"]);
+        //this.map.hideZoomSlider();
+    }
+
+    private createToolbar() {
+        this.toolbar = new Draw(this.map);
+        this.toolbar.on("draw-end", (evt) => { this.addToMap(this.toolbar,evt) });
+    }
+
+    private addToMap(toolbar,evt) {
+        var symbol;
+        toolbar.deactivate();
+        this.map.showZoomSlider();
+        switch (evt.geometry.type) {
+            case "point":
+            case "multipoint":
+                symbol = new SimpleMarkerSymbol();
+                break;
+            case "polyline":
+                symbol = new SimpleLineSymbol();
+                break;
+            default:
+                symbol = new SimpleFillSymbol();
+                break;
+        }
+        var graphic = new Graphic(evt.geometry, symbol);
+        this.map.graphics.add(graphic);
+    }
+
 
     private addScaleBar() {
         var scalebar = new Scalebar({
@@ -62,4 +108,7 @@ class MapController {
             console.log("basemap gallery error:  ", msg);
         });
     }
+
+  
+
 }
