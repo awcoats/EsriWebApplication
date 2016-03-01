@@ -4,13 +4,13 @@ import esri = require("esri");
 import Map = require("esri/map");
 import Point = require("esri/geometry/Point");
 import Scalebar = require("esri/dijit/Scalebar");
-//import BasemapGallery = require("esri/dijit/BasemapGallery");
+import BasemapGallery = require("esri/dijit/BasemapGallery");
 import Polygon = require("esri/geometry/Polygon");
 import Draw = require("esri/toolbars/draw")
 import Edit = require("esri/toolbars/edit");
 import SimpleMarkerSymbol = require("esri/symbols/SimpleMarkerSymbol");
 import SimpleLineSymbol = require("esri/symbols/SimpleLineSymbol");
-import SimpleFillSymbol =  require("esri/symbols/SimpleFillSymbol"),
+import SimpleFillSymbol = require("esri/symbols/SimpleFillSymbol");
 import Graphic = require("esri/graphic");
 import jsonUtils = require("esri/geometry/jsonUtils");
 import Color = require("esri/Color");
@@ -36,7 +36,7 @@ class MapController {
         this.map = new Map(this.mapDiv, mapOptions);
 
         this.addScaleBar();
-        
+        this.addBasemapGallery();
       
     }
 
@@ -50,5 +50,16 @@ class MapController {
         });
     }
 
-   
+    private addBasemapGallery() {
+        //add the basemap gallery, in this case we'll display maps from ArcGIS.com including bing maps
+        var basemapGallery = new BasemapGallery({
+            showArcGISBasemaps: true,
+            map: this.map
+        }, "basemapGallery");
+        basemapGallery.startup();
+      
+        basemapGallery.on("error", function (msg) {
+            console.log("basemap gallery error:  ", msg);
+        });
+    }
 }
