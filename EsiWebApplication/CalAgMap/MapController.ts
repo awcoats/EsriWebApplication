@@ -19,6 +19,13 @@ import Color = require("esri/Color");
 import Button = require("dijit/form/Button");
 import on = require("dojo/on");
 import dom = require("dojo/dom");
+import FeatureLayer = require("esri/layers/FeatureLayer");
+import Legend = require("esri/dijit/Legend");
+import LayerList = require("esri/dijit/LayerList");
+import arrayUtils = require("dojo/_base/array");
+import PopupTemplate = require("esri/dijit/PopupTemplate");
+
+import CalAgPrinting = require("CalAgPrinting");
 //import Menu = require("esri/dijit/Menu");
 //import MenuItem = require("dijit/MenuItem");
 //import MenuSeperator = require("dijit/MenuSeparator");
@@ -32,28 +39,59 @@ class MapController {
     }
 
     start() {
-        var point = new Point(-122.45, 37.75); // long, lat
+        var point = new Point(-121.3719172, 37.9730027); // long, lat
         var mapOptions: esri.MapOptions = {};
-        mapOptions.basemap = "topo";
+        mapOptions.basemap = "gray";
         mapOptions.center = point;
-        mapOptions.zoom = 12;
+        mapOptions.zoom = 6;
 
         this.map = new Map(this.mapDiv, mapOptions);
 
-        this.map.on("load", () => {
-            this.addScaleBar();
-            this.addBasemapGallery();
-            this.createToolbar();
-        });
-    }
+        this.map.on("load", () => { });
+        this.addScaleBar();
+        this.addBasemapGallery();
+        this.createToolbar();
 
+
+        var featureLayer = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2", {
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"]
+
+        });
+
+        this.map.addLayer(featureLayer);
+
+        this.addLayerList();
+
+        this.addLegend(featureLayer);
+    
+    }
+    private addLegend(featureLayer) {
+        var layer = featureLayer;
+        var layerInfo = [{ layer: layer, title: 'States' }];
+
+        if (layerInfo.length > 0) {
+            var legendDijit = new Legend({
+                map: this.map,
+                layerInfos: layerInfo
+            }, "legendDiv");
+            legendDijit.startup();
+        }
+    }
+    private addLayerList() {
+        var myWidget = new LayerList({
+            map: this.map,
+            layers: this.map.getLayersVisibleAtScale()
+        }, "layerList");
+        myWidget.startup()
+    }
 
 
     private createToolbar() {
         this.toolbar = new Draw(this.map);
         this.toolbar.on("draw-end", (evt) => { this.addToMap(this.toolbar, evt) });
 
-        on(dom.byId("info"), "click",  (evt)=> {
+        on(dom.byId("info"), "click", (evt) => {
             if (evt.target.id === "info") {
                 return;
             }
@@ -63,7 +101,7 @@ class MapController {
         });
     }
 
-    private addToMap(toolbar,evt) {
+    private addToMap(toolbar, evt) {
         var symbol;
         toolbar.deactivate();
         this.map.showZoomSlider();
@@ -101,7 +139,7 @@ class MapController {
             map: this.map
         }, "basemapGallery");
         basemapGallery.startup();
-      
+
         basemapGallery.on("error", function (msg) {
             console.log("basemap gallery error:  ", msg);
         });

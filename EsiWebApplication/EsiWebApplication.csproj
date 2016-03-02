@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="arcgis-js-api.d.ts" />
+    <TypeScriptCompile Include="CalAgMap\CalAgPrinting.ts" />
     <TypeScriptCompile Include="CalAgMap\main.ts" />
     <TypeScriptCompile Include="CalAgMap\MapController.ts" />
     <TypeScriptCompile Include="dijit.d.ts" />
