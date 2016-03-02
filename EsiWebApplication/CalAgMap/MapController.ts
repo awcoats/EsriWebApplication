@@ -1,4 +1,6 @@
 ﻿/// <reference path="../arcgis-js-api.d.ts"/>
+/// <reference path="../dijit.d.ts"/>
+/// <reference path="../dojo.d.ts"/>
 
 import esri = require("esri");
 import Map = require("esri/map");
@@ -14,6 +16,9 @@ import SimpleFillSymbol = require("esri/symbols/SimpleFillSymbol");
 import Graphic = require("esri/graphic");
 import jsonUtils = require("esri/geometry/jsonUtils");
 import Color = require("esri/Color");
+import Button = require("dijit/form/Button");
+import on = require("dojo/on");
+import dom = require("dojo/dom");
 //import Menu = require("esri/dijit/Menu");
 //import MenuItem = require("dijit/MenuItem");
 //import MenuSeperator = require("dijit/MenuSeparator");
@@ -35,34 +40,27 @@ class MapController {
 
         this.map = new Map(this.mapDiv, mapOptions);
 
-        this.addScaleBar();
-        this.addBasemapGallery();
-        //this.map.on("load", this.addGraphics);
-        //this.addGraphics();
-        this.createToolbar();
-
-        this.activateTool();
-        // loop through all dijits, connect onClick event
-        // listeners for buttons to activate drawing tools
-        //registry.forEach(function (d) {
-        //    // d is a reference to a dijit
-        //    // could be a layout container or a button
-        //    if (d.declaredClass === "dijit.form.Button") {
-        //        d.on("click", this.activateTool);
-        //    }
-        //});
-        //dom.byId("result2").
+        this.map.on("load", () => {
+            this.addScaleBar();
+            this.addBasemapGallery();
+            this.createToolbar();
+        });
     }
 
-    private activateTool() {
-       // var tool = this.label.toUpperCase().replace(/ /g, "_");
-        this.toolbar.activate(Draw["POLYLINE"]);
-        //this.map.hideZoomSlider();
-    }
+
 
     private createToolbar() {
         this.toolbar = new Draw(this.map);
-        this.toolbar.on("draw-end", (evt) => { this.addToMap(this.toolbar,evt) });
+        this.toolbar.on("draw-end", (evt) => { this.addToMap(this.toolbar, evt) });
+
+        on(dom.byId("info"), "click",  (evt)=> {
+            if (evt.target.id === "info") {
+                return;
+            }
+            var tool = evt.target.id.toLowerCase();
+            this.map.disableMapNavigation();
+            this.toolbar.activate(tool);
+        });
     }
 
     private addToMap(toolbar,evt) {
@@ -108,7 +106,4 @@ class MapController {
             console.log("basemap gallery error:  ", msg);
         });
     }
-
-  
-
 }

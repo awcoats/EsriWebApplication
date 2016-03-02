@@ -88,6 +88,8 @@
     <TypeScriptCompile Include="arcgis-js-api.d.ts" />
     <TypeScriptCompile Include="CalAgMap\main.ts" />
     <TypeScriptCompile Include="CalAgMap\MapController.ts" />
+    <TypeScriptCompile Include="dijit.d.ts" />
+    <TypeScriptCompile Include="dojo.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
