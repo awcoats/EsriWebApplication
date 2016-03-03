@@ -13,19 +13,24 @@ import Edit = require("esri/toolbars/edit");
 import SimpleMarkerSymbol = require("esri/symbols/SimpleMarkerSymbol");
 import SimpleLineSymbol = require("esri/symbols/SimpleLineSymbol");
 import SimpleFillSymbol = require("esri/symbols/SimpleFillSymbol");
+import SimpleRenderer = require("esri/renderers/SimpleRenderer");
 import Graphic = require("esri/graphic");
 import jsonUtils = require("esri/geometry/jsonUtils");
 import Color = require("esri/Color");
 import Button = require("dijit/form/Button");
 import on = require("dojo/on");
 import dom = require("dojo/dom");
+import registry = require("dijit/registry");
 import FeatureLayer = require("esri/layers/FeatureLayer");
 import Legend = require("esri/dijit/Legend");
 import LayerList = require("esri/dijit/LayerList");
 import arrayUtils = require("dojo/_base/array");
 import PopupTemplate = require("esri/dijit/PopupTemplate");
-
+import parser = require("dojo/parser");
 import CalAgPrinting = require("CalAgPrinting");
+import Measurement = require("esri/dijit/Measurement");
+import ColorPicker = require("esri/dijit/ColorPicker");
+import SymbolStyler = require("esri/dijit/SymbolStyler");
 //import Menu = require("esri/dijit/Menu");
 //import MenuItem = require("dijit/MenuItem");
 //import MenuSeperator = require("dijit/MenuSeparator");
@@ -34,16 +39,24 @@ export = MapController;
 class MapController {
     map: Map;
     toolbar: Draw;
+    fillSymbol: SimpleFillSymbol;
 
     constructor(public mapDiv: string) {
     }
 
     start() {
+        var root = document.getElementById("toolbox");
+        parser.parse(root, {});
+
+
+        console.log("MapController.start()");
         var point = new Point(-121.3719172, 37.9730027); // long, lat
         var mapOptions: esri.MapOptions = {};
         mapOptions.basemap = "gray";
         mapOptions.center = point;
         mapOptions.zoom = 6;
+
+      
 
         this.map = new Map(this.mapDiv, mapOptions);
 
@@ -52,19 +65,90 @@ class MapController {
         this.addBasemapGallery();
         this.createToolbar();
 
-
         var featureLayer = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2", {
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"]
-
         });
+        //var featureLayer = new FeatureLayer("http://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/fbTrim/FeatureServer/0", {
+        //    mode: FeatureLayer.MODE_ONDEMAND,
+        //    outFields: ["*"]
+        //});
 
         this.map.addLayer(featureLayer);
 
-        this.addLayerList();
+        this.fillSymbol = new SimpleFillSymbol();
+        this.fillSymbol.style = SimpleFillSymbol.STYLE_SOLID;
+        this.fillSymbol.setColor(new Color([255, 255, 0, 0.5]));
+        var renderer = new SimpleRenderer(this.fillSymbol);
+        featureLayer.setRenderer(renderer);
 
+        this.addLayerList();
+        
         this.addLegend(featureLayer);
-    
+
+        //var measurement = new Measurement({
+        //    map: this.map
+        //}, dom.byId("measurementDiv"));
+        //measurement.startup();
+
+      
+        this.addLayerColorPicker(featureLayer);
+
+        //featureLayer.
+        //var myButton = new Button({
+        //    label: "ChnageColor",
+        //    onClick: function () {
+        //        var symbol = new SimpleFillSymbol();
+        //        symbol.style = SimpleFillSymbol.STYLE_SOLID;
+        //        symbol.setColor(new Color([255 ,0, 0, 0.5]));
+        //        var renderer = new SimpleRenderer(symbol);
+        //        featureLayer.setRenderer(renderer);
+        //        featureLayer.redraw();
+        //    }
+        //}, dom.byId("changeColorButton")).startup()
+    }
+
+    private addLayerColorPicker(featureLayer: FeatureLayer) {
+
+       
+        //symbolStyle.startup();
+
+        var myButton = new Button({
+            label: "Apply",
+            onClick: function () {
+                //var symbolStyle = <SymbolStyler>registry.("symbolStyler2");
+                ///this.fillSymbol.setColor(symbolStyle.fillColor);
+        //    var renderer = new SimpleRenderer(this.fillSymbol);
+        //    featureLayer.setRenderer(renderer);
+        //    featureLayer.redraw();
+            }
+        }, dom.byId("symbolStylerApply")).startup();
+        
+        //var colorPicker = new ColorPicker({
+        //    required: false, color: new Color("red"), colorsPerRow: 10, palette: null, recentColors: [], showRecentColors: false, showTransparencySlider: true
+
+        //}, "fillColorDiv");
+        //colorPicker.on("color-change", (evt) => {
+        //    this.fillSymbol.setColor(evt.target.color);
+        //    var renderer = new SimpleRenderer(this.fillSymbol);
+        //    featureLayer.setRenderer(renderer);
+        //    featureLayer.redraw();
+        //});
+        //colorPicker.startup();
+
+        //var colorPicker2 = new ColorPicker({
+        //    required: false, color: new Color("red"), colorsPerRow: 10, palette:null, recentColors: [], showRecentColors: false, showTransparencySlider: true
+        //}, "outlineColorDiv");
+        //colorPicker2.on("color-change", (evt) => {
+        //    var lineSymbol = new SimpleLineSymbol();
+        //    lineSymbol.setColor(evt.target.color);
+        //    this.fillSymbol.setOutline(lineSymbol);
+        //    var renderer = new SimpleRenderer(this.fillSymbol);
+        //    featureLayer.setRenderer(renderer);
+        //    featureLayer.redraw();
+        //});
+        //colorPicker2.startup();
+
     }
     private addLegend(featureLayer) {
         var layer = featureLayer;
