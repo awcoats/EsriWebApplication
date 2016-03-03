@@ -90,7 +90,7 @@ class MapController {
 
         this.addScaleBar();
         this.addBasemapGallery();
-        this.createToolbar();
+        this.createGraphicsToolbar();
 
        
 
@@ -177,7 +177,7 @@ class MapController {
     }
 
 
-    private createToolbar() {
+    private createGraphicsToolbar() {
         this.toolbar = new Draw(this.map);
         this.toolbar.on("draw-end", (evt) => { this.addToMap(this.toolbar, evt) });
 
@@ -189,6 +189,13 @@ class MapController {
             this.map.disableMapNavigation();
             this.toolbar.activate(tool);
         });
+       
+        var myButton = new Button({
+            label: "Clear",
+            onClick:  () =>{
+                this.map.graphics.clear();
+            }
+        }, dom.byId("ClearGraphics")).startup();
     }
 
     private addToMap(toolbar, evt) {
