@@ -22,28 +22,17 @@
             -moz-border-radius: 6px;
             -webkit-border-radius: 6px;
             position: absolute;
-            top: 35px;
-            right: 60px;
+            top: 15px;
+            right: 15px;
             width: 300px;
             bottom: 35px;
             height: 500px;
             z-index: 90;
         }
 
-        .dojoxFloatingPaneContent {
-            /*font-family: Arial, Helvetica, sans-serif;
-            font-size: 8pt;
-            font-weight: bold;*/
-            overflow: auto;
-        }
-
         .dojoxFloatingPaneTitle, .reportTitlePane {
             color: white;
             background-color: #76a2c5;
-            /*font-family: Arial, Helvetica, sans-serif;
-            font-size: 12pt;
-            font-weight: bold;*/
-            overflow: auto;
         }
     </style>
 
@@ -57,24 +46,18 @@
                 location: "/CalAgMap/"
             }]
         }, ["CalAgMap",
-            //"CalAgMap/MapController",
             "dojo/domReady!",
             "dojo/_base/array", "dojo/parser",
             "dijit/layout/AccordionContainer",
             "dijit/layout/ContentPane",
             "dijit/layout/BorderContainer"
         ], function (demo, domready, array, parser) {
-            console.log("main parse");
-
-            //var mapController = new MapController("mapDiv");
-            //mapController.start();
-
+            console.log("Demo.html");
         });
 
     </script>
 </head>
 <body class="claro">
-
 
     <div data-dojo-type="dijit/layout/BorderContainer"
          data-dojo-props="design:'headline', gutters:false"
@@ -85,10 +68,11 @@
              data-dojo-props="region:'center'"
              style="padding:0;">
 
+            <!-- floating toolbox window-->
             <div id="testFloatingPane" data-dojo-type="dojox/layout/FloatingPane"
                  data-dojo-props="title:'CalAgPermits', closable:false, resizable:true, dockable:false">
 
-
+                <!-- accordion-->
                 <div data-dojo-type="dijit/layout/AccordionContainer">
                     <div data-dojo-type="dijit/layout/ContentPane" id="legendPane"
                          data-dojo-props="title:'Legend', selected:true">
@@ -130,9 +114,10 @@
                     <div data-dojo-type="dijit/layout/ContentPane"
                          data-dojo-props="title:'Buffer'" id="bufferPane">
                         <div id="measurementDiv"></div>
-
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 </body>
 </html>

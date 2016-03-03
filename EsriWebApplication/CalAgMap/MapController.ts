@@ -31,10 +31,7 @@ import CalAgPrinting = require("CalAgPrinting");
 import Measurement = require("esri/dijit/Measurement");
 import ColorPicker = require("esri/dijit/ColorPicker");
 import SymbolStyler = require("esri/dijit/SymbolStyler");
-//import ready = require("dojo/ready");
-//import Menu = require("esri/dijit/Menu");
-//import MenuItem = require("dijit/MenuItem");
-//import MenuSeperator = require("dijit/MenuSeparator");
+
 export = MapController;
 
 class MapController {
@@ -46,10 +43,10 @@ class MapController {
     }
 
     start() {
+        // required to make the dojo-type tags to be transformed for the window/ floating toolbar
         var root = document.getElementById("toolbox");
         parser.parse(root, {});
        
-
         console.log("MapController.start()");
         var point = new Point(-121.3719172, 37.9730027); // long, lat
         var mapOptions: esri.MapOptions = {};
@@ -67,9 +64,9 @@ class MapController {
             //pFP.show();
             //dom.byId("testFloatingPane").attr("display","inline");
         });
-        //this.addScaleBar();
-       // this.addBasemapGallery();
-        //this.createToolbar();
+        this.addScaleBar();
+        this.addBasemapGallery();
+        this.createToolbar();
 
         var featureLayer = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2", {
             mode: FeatureLayer.MODE_ONDEMAND,
@@ -88,45 +85,24 @@ class MapController {
         //var renderer = new SimpleRenderer(this.fillSymbol);
         //featureLayer.setRenderer(renderer);
 
-        //this.addLayerList();
+        this.addLayerList();
         
-        //this.addLegend(featureLayer);
+        this.addLegend(featureLayer);
 
         //var measurement = new Measurement({
         //    map: this.map
         //}, dom.byId("measurementDiv"));
         //measurement.startup();
-
       
-        //this.addLayerColorPicker(featureLayer);
-
-        //featureLayer.
-        //var myButton = new Button({
-        //    label: "ChnageColor",
-        //    onClick: function () {
-        //        var symbol = new SimpleFillSymbol();
-        //        symbol.style = SimpleFillSymbol.STYLE_SOLID;
-        //        symbol.setColor(new Color([255 ,0, 0, 0.5]));
-        //        var renderer = new SimpleRenderer(symbol);
-        //        featureLayer.setRenderer(renderer);
-        //        featureLayer.redraw();
-        //    }
-        //}, dom.byId("changeColorButton")).startup()
+        this.addLayerColorPicker(featureLayer);
+      
     }
 
     private addLayerColorPicker(featureLayer: FeatureLayer) {
-
-       
-        //symbolStyle.startup();
-
-        var myButton = new Button({
+    var myButton = new Button({
             label: "Apply",
             onClick: function () {
-                //var symbolStyle = <SymbolStyler>registry.("symbolStyler2");
-                ///this.fillSymbol.setColor(symbolStyle.fillColor);
-        //    var renderer = new SimpleRenderer(this.fillSymbol);
-        //    featureLayer.setRenderer(renderer);
-        //    featureLayer.redraw();
+              
             }
         }, dom.byId("symbolStylerApply")).startup();
         
@@ -156,6 +132,7 @@ class MapController {
         //colorPicker2.startup();
 
     }
+
     private addLegend(featureLayer) {
         var layer = featureLayer;
         var layerInfo = [{ layer: layer, title: 'States' }];
@@ -168,6 +145,8 @@ class MapController {
             legendDijit.startup();
         }
     }
+
+
     private addLayerList() {
         var myWidget = new LayerList({
             map: this.map,
