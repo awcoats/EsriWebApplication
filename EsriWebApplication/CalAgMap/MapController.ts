@@ -33,7 +33,7 @@ import ColorPicker = require("esri/dijit/ColorPicker");
 import SymbolStyler = require("esri/dijit/SymbolStyler");
 import OpenStreetMapLayer = require("esri/layers/OpenStreetMapLayer");
 import HorizontalSlider = require("dijit/form/HorizontalSlider");
-
+import HomeButton = require("esri/dijit/HomeButton");
 export = MapController;
 
 class MapController {
@@ -70,6 +70,7 @@ class MapController {
         //http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer
 
         this.map.addLayer(basemap);
+        this.addHomeButton();
 
         var featureLayer = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2", {
             mode: FeatureLayer.MODE_ONDEMAND,
@@ -105,6 +106,12 @@ class MapController {
       
         this.addLayerColorPicker(featureLayer);
       
+    }
+    private addHomeButton() {
+        var home = new HomeButton({
+            map: this.map
+        }, "HomeButton");
+        home.startup();
     }
 
     private addLayerColorPicker(featureLayer: FeatureLayer) {

@@ -18,6 +18,13 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
+        #HomeButton {
+            position: absolute;
+            top: 95px;
+            left: 20px;
+            z-index: 50;
+        }
+
         #testFloatingPane {
             -moz-border-radius: 6px;
             -webkit-border-radius: 6px;
@@ -67,6 +74,8 @@
              data-dojo-type="dijit/layout/ContentPane"
              data-dojo-props="region:'center'"
              style="padding:0;">
+
+            <div id="HomeButton"></div>
 
             <!-- floating toolbox window-->
             <div id="testFloatingPane" data-dojo-type="dojox/layout/FloatingPane"
