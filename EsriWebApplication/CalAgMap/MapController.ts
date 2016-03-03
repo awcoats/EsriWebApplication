@@ -34,6 +34,7 @@ import SymbolStyler = require("esri/dijit/SymbolStyler");
 import OpenStreetMapLayer = require("esri/layers/OpenStreetMapLayer");
 import HorizontalSlider = require("dijit/form/HorizontalSlider");
 import HomeButton = require("esri/dijit/HomeButton");
+import LocateButton = require("esri/dijit/LocateButton");
 export = MapController;
 
 class MapController {
@@ -71,6 +72,10 @@ class MapController {
 
         this.map.addLayer(basemap);
         this.addHomeButton();
+        var geoLocate = new LocateButton({
+            map: this.map
+        }, "LocateButton");
+        geoLocate.startup();
 
         var featureLayer = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2", {
             mode: FeatureLayer.MODE_ONDEMAND,
