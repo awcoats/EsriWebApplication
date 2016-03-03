@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+    <title>Simple Map</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.8/js/esri/css/esri.css">
+    <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.8/js/dgrid/css/skins/claro.css">
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/3.8/js/dojo/dojox/layout/resources/FloatingPane.css">
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/3.8/js/dojo/dojox/layout/resources/ResizeHandle.css">
+    <style>
+        html, body, #map {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #FFF;
+            overflow: hidden;
+            font-family: "Trebuchet MS";
+        }
+
+        #testFloatingPane {
+            -moz-border-radius: 6px;
+            -webkit-border-radius: 6px;
+            position: absolute;
+            top: 35px;
+            right: 60px;
+            width: 500px;
+            bottom:35px;
+            height: 300px;
+            z-index: 90;
+        }
+
+        .dojoxFloatingPaneContent {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 8pt;
+            font-weight: bold;
+            overflow: auto;
+        }
+
+        .dojoxFloatingPaneTitle, .reportTitlePane {
+            color: white;
+            background-color: #76a2c5;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12pt;
+            font-weight: bold;
+            overflow: auto;
+        }
+    </style>
+    <script>dojoConfig = { parseOnLoad: true, isDebug: true }</script>
+    <script src="http://js.arcgis.com/3.8/"></script>
+    <script>
+        var map;
+        var pFP;
+
+        require(["esri/map", "dojox/layout/FloatingPane", "dijit/registry", "dojo/ready",
+                 "dojo/domReady!"],
+            function (Map, FloatingPane, registry, ready) {
+                ready(function () {
+                    pFP = registry.byId("testFloatingPane");
+                })
+
+                //pFP = new FloatingPane({
+                //    title: "A floating pane",
+                //    resizable: true, dockable: true, closable: false,
+                //    //style: "position:relative;top:100px;left:0;width:400px;height:100px;visibility:hidden;",
+                //    id: "pFloatingPane"
+                //}, dojo.byId("testFLoatingPane"));
+                //pFP.startup();
+
+                map = new Map("map", {
+                    basemap: "topo",
+                    center: [-122.45, 37.75], // long, lat
+                    zoom: 13,
+                    sliderStyle: "small"
+                });
+
+                map.on("click", function () {
+                    pFP.show()
+                });
+            });
+    </script>
+</head>
+
+<body class="claro">
+    <div id="map"></div>
+    <!--<div id="testFloatingPane"></div>-->
+    <div id="testFloatingPane" data-dojo-type="dojox/layout/FloatingPane"
+         data-dojo-props="title:'Search Results', closable:true, resizable:true, dockable:true"
+         >
+        <!--<div id="reportContainer" data-dojo-type="dijit/layout/ContentPane">
+        </div>-->
+    </div>
+</body>
+</html>

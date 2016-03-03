@@ -31,6 +31,7 @@ import CalAgPrinting = require("CalAgPrinting");
 import Measurement = require("esri/dijit/Measurement");
 import ColorPicker = require("esri/dijit/ColorPicker");
 import SymbolStyler = require("esri/dijit/SymbolStyler");
+//import ready = require("dojo/ready");
 //import Menu = require("esri/dijit/Menu");
 //import MenuItem = require("dijit/MenuItem");
 //import MenuSeperator = require("dijit/MenuSeparator");
@@ -47,7 +48,7 @@ class MapController {
     start() {
         var root = document.getElementById("toolbox");
         parser.parse(root, {});
-
+       
 
         console.log("MapController.start()");
         var point = new Point(-121.3719172, 37.9730027); // long, lat
@@ -60,10 +61,15 @@ class MapController {
 
         this.map = new Map(this.mapDiv, mapOptions);
 
-        this.map.on("load", () => { });
-        this.addScaleBar();
-        this.addBasemapGallery();
-        this.createToolbar();
+        this.map.on("load", () => {
+            console.log("map loaded");
+            var pFP = registry.byId("testFloatingPane");
+            //pFP.show();
+            //dom.byId("testFloatingPane").attr("display","inline");
+        });
+        //this.addScaleBar();
+       // this.addBasemapGallery();
+        //this.createToolbar();
 
         var featureLayer = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2", {
             mode: FeatureLayer.MODE_ONDEMAND,
@@ -76,15 +82,15 @@ class MapController {
 
         this.map.addLayer(featureLayer);
 
-        this.fillSymbol = new SimpleFillSymbol();
-        this.fillSymbol.style = SimpleFillSymbol.STYLE_SOLID;
-        this.fillSymbol.setColor(new Color([255, 255, 0, 0.5]));
-        var renderer = new SimpleRenderer(this.fillSymbol);
-        featureLayer.setRenderer(renderer);
+        //this.fillSymbol = new SimpleFillSymbol();
+        //this.fillSymbol.style = SimpleFillSymbol.STYLE_SOLID;
+        //this.fillSymbol.setColor(new Color([255, 255, 0, 0.5]));
+        //var renderer = new SimpleRenderer(this.fillSymbol);
+        //featureLayer.setRenderer(renderer);
 
-        this.addLayerList();
+        //this.addLayerList();
         
-        this.addLegend(featureLayer);
+        //this.addLegend(featureLayer);
 
         //var measurement = new Measurement({
         //    map: this.map
@@ -92,7 +98,7 @@ class MapController {
         //measurement.startup();
 
       
-        this.addLayerColorPicker(featureLayer);
+        //this.addLayerColorPicker(featureLayer);
 
         //featureLayer.
         //var myButton = new Button({
