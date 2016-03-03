@@ -31,6 +31,8 @@ import CalAgPrinting = require("CalAgPrinting");
 import Measurement = require("esri/dijit/Measurement");
 import ColorPicker = require("esri/dijit/ColorPicker");
 import SymbolStyler = require("esri/dijit/SymbolStyler");
+import OpenStreetMapLayer = require("esri/layers/OpenStreetMapLayer");
+import HorizontalSlider = require("dijit/form/HorizontalSlider");
 
 export = MapController;
 
@@ -54,8 +56,7 @@ class MapController {
         mapOptions.center = point;
         mapOptions.zoom = 6;
 
-      
-
+       
         this.map = new Map(this.mapDiv, mapOptions);
 
         this.map.on("load", () => {
@@ -64,9 +65,11 @@ class MapController {
             //pFP.show();
             //dom.byId("testFloatingPane").attr("display","inline");
         });
-        this.addScaleBar();
-        this.addBasemapGallery();
-        this.createToolbar();
+
+        var basemap = new OpenStreetMapLayer();
+        //http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer
+
+        this.map.addLayer(basemap);
 
         var featureLayer = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2", {
             mode: FeatureLayer.MODE_ONDEMAND,
@@ -78,6 +81,12 @@ class MapController {
         //});
 
         this.map.addLayer(featureLayer);
+
+        this.addScaleBar();
+        this.addBasemapGallery();
+        this.createToolbar();
+
+       
 
         //this.fillSymbol = new SimpleFillSymbol();
         //this.fillSymbol.style = SimpleFillSymbol.STYLE_SOLID;
@@ -212,5 +221,19 @@ class MapController {
         basemapGallery.on("error", function (msg) {
             console.log("basemap gallery error:  ", msg);
         });
+
+        var slider = new HorizontalSlider({
+            name: "slider",
+            value: 1,
+            minimum: 0,
+            maximum: 1,
+            showButtons: true,
+            intermediateChanges: true,
+            onChange: (value) => {
+                //TODO: remove hard coding of this layer
+                var layer = this.map.getLayer("layer2").setOpacity(value);
+            }
+        }, dom.byId("opacitySlider"));
+        slider.startup();
     }
 }
