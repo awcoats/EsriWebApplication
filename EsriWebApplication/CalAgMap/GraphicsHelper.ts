@@ -11,11 +11,18 @@ import Color = require("esri/Color");
 import Graphic = require("esri/graphic");
 import Point = require("esri/geometry/Point");
 import dom = require("dojo/dom");
+import BufferParameters = require("esri/tasks/BufferParameters");
+//import GeometryService = require("esri/tasks/GeometryService");
+import MapController = require("./MapController");
+import normalizeUtils = require("esri/geometry/normalizeUtils");
+import esriConfig = require("esri/config");
+import array = require("dojo/_base/array");
 
 export = GraphicsHelper;
 
 class GraphicsHelper {
     map: Map
+    mapController: MapController;
     // right click graphics editing toolbar
     editToolbar;
     ctxMenuForGraphics;
@@ -23,8 +30,12 @@ class GraphicsHelper {
     selected;
     currentLocation;
 
-    constructor(public map2: Map) {
-        this.map = map2;
+    constructor(public mapController2: MapController) {
+        this.map = mapController2.map;
+        this.mapController = mapController2;
+
+        //TODO - enable Geometry server.
+        //esriConfig.defaults.geometryService = new GeometryService("http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
     }
 
     public createToolbarAndContextMenu() {
@@ -35,6 +46,7 @@ class GraphicsHelper {
         this.map.on("click", (evt) => {
             this.editToolbar.deactivate();
         });
+        //this.editToolbar.on("draw-end", this.doBuffer);
         this.createMapMenu();
         this.createGraphicsMenu();
     }
@@ -117,7 +129,8 @@ class GraphicsHelper {
         this.ctxMenuForGraphics.addChild(new MenuItem({
             label: "Buffer",
             onClick: () => {
-                alert("Buffer is not implemented");
+                //var graphics = this.map.graphics[0];
+                //this.doBuffer(graphics);
             }
         }));
 
@@ -146,6 +159,65 @@ class GraphicsHelper {
             this.ctxMenuForGraphics.unBindDomNode(evt.graphic.getDojoShape().getNode());
         });
     }
+
+    /*private doBuffer(evtObj) {
+        //tb.deactivate();
+        console.log("doBuffer");
+        this.mapController.toolbar.deactivate();
+        var geometry = evtObj.geometry, symbol;
+        switch (geometry.type) {
+            case "point":
+                symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0]), 1), new Color([0, 255, 0, 0.25]));
+                break;
+            case "polyline":
+                symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new Color([255, 0, 0]), 1);
+                break;
+            case "polygon":
+                symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_NULL, new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT, new Color([255, 0, 0]), 2), new Color([255, 255, 0, 0.25]));
+                break;
+        }
+
+        var graphic = new Graphic(geometry, symbol);
+        this.map.graphics.add(graphic);
+
+        //setup the buffer parameters
+        var params = new BufferParameters();
+        params.distances = [dom.byId("distance").value];
+        params.outSpatialReference = this.map.spatialReference;
+        params.unit = GeometryService[dom.byId("unit").value];
+        //normalize the geometry 
+
+        normalizeUtils.normalizeCentralMeridian([geometry]).then( (normalizedGeometries) =>{
+            var normalizedGeometry = normalizedGeometries[0];
+            if (normalizedGeometry.type === "polygon") {
+                //if geometry is a polygon then simplify polygon.  This will make the user drawn polygon topologically correct.
+                esriConfig.defaults.geometryService.simplify([normalizedGeometry],  (geometries)=> {
+                    params.geometries = geometries;
+                    esriConfig.defaults.geometryService.buffer(params, this.showBuffer);
+                });
+            } else {
+                params.geometries = [normalizedGeometry];
+                esriConfig.defaults.geometryService.buffer(params, this.showBuffer);
+            }
+
+        });
+    }
+
+    private showBuffer(bufferedGeometries) {
+        var symbol = new SimpleFillSymbol(
+            SimpleFillSymbol.STYLE_SOLID,
+            new SimpleLineSymbol(
+                SimpleLineSymbol.STYLE_SOLID,
+                new Color([255, 0, 0, 0.65]), 2
+            ),
+            new Color([255, 0, 0, 0.35])
+        );
+
+        array.forEach(bufferedGeometries, function (geometry) {
+            var graphic = new Graphic(geometry, symbol);
+            this.map.graphics.add(graphic);
+        });
+    }*/
 
     // Helper Methods
     private getMapPointFromMenuPosition(box) {

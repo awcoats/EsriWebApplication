@@ -64,7 +64,7 @@ class MapController {
 
         this.map.on("load", () => {
             console.log("map loaded");
-            var graphicsHelper = new GraphicsHelper(this.map);
+            var graphicsHelper = new GraphicsHelper(this);
             graphicsHelper.createToolbarAndContextMenu();
             //this.createToolbarAndContextMenu();
         });
@@ -182,7 +182,10 @@ class MapController {
 
     private createGraphicsToolbar() {
         this.toolbar = new Draw(this.map);
-        this.toolbar.on("draw-end", (evt) => { this.addToMap(this.toolbar, evt) });
+        this.toolbar.on("draw-end", (evt) => {
+           
+            this.addToMap(this.toolbar, evt)
+        });
 
         on(dom.byId("info"), "click", (evt) => {
             if (evt.target.id === "info") {
@@ -204,7 +207,7 @@ class MapController {
     private addToMap(toolbar, evt) {
         var symbol;
         toolbar.deactivate();
-        this.map.showZoomSlider();
+        this.map.enableMapNavigation();
         switch (evt.geometry.type) {
             case "point":
             case "multipoint":
