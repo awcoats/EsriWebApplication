@@ -3109,6 +3109,7 @@ declare module "esri/arcgis/utils" {
          * @param createMapResponse Object returned by .createMap() in the .then() callback.
          */
         getLegendLayers(createMapResponse: any): any[];
+       
     };
     export = utils;
 }
@@ -11075,6 +11076,9 @@ declare module "esri/map" {
         visible: boolean;
         /** Current width of the map in screen pixels. */
         width: number;
+
+        //added by AWC to get graphics context menu to work.
+        container: any;
         /**
          * Creates a new map inside of the given HTML container, which is often a DIV element.
          * @param divId Container id for the referencing map.

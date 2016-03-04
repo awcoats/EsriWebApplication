@@ -10,6 +10,7 @@ import SimpleFillSymbol = require("esri/symbols/SimpleFillSymbol");
 import Color = require("esri/Color");
 import Graphic = require("esri/graphic");
 import Point = require("esri/geometry/Point");
+import dom = require("dojo/dom");
 
 export = GraphicsHelper;
 
@@ -69,7 +70,8 @@ class GraphicsHelper {
         }));
 
         this.ctxMenuForMap.startup();
-        this.ctxMenuForMap.bindDomNode(this.map);
+        //var container = dom.byId("mapContainer").get;
+        this.ctxMenuForMap.bindDomNode(this.map.container);
     }
     private createGraphicsMenu() {
         // Creates right-click context menu for GRAPHICS
@@ -111,6 +113,16 @@ class GraphicsHelper {
         }));
 
         this.ctxMenuForGraphics.addChild(new MenuSeparator());
+
+        this.ctxMenuForGraphics.addChild(new MenuItem({
+            label: "Buffer",
+            onClick: () => {
+                alert("Buffer is not implemented");
+            }
+        }));
+
+        this.ctxMenuForGraphics.addChild(new MenuSeparator());
+
         this.ctxMenuForGraphics.addChild(new MenuItem({
             label: "Delete",
             onClick: () => {
