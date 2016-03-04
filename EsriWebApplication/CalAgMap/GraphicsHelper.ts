@@ -44,6 +44,7 @@ class GraphicsHelper {
         this.editToolbar = new Edit(this.map);
 
         this.map.on("click", (evt) => {
+         
             this.editToolbar.deactivate();
         });
         //this.editToolbar.on("draw-end", this.doBuffer);

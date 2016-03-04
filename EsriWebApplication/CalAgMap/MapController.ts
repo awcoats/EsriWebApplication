@@ -135,6 +135,7 @@ class MapController {
             infoTemplate: template
         });
         this.map.addLayer(featureLayer);
+       
 
         this.addScaleBar();
         this.addBasemapGallery();
@@ -239,6 +240,7 @@ class MapController {
             }
             var tool = evt.target.id.toLowerCase();
             this.map.disableMapNavigation();
+            this.map.setInfoWindowOnClick(false);
             this.toolbar.activate(tool);
         });
        
@@ -254,6 +256,7 @@ class MapController {
         var symbol;
         toolbar.deactivate();
         this.map.enableMapNavigation();
+         this.map.setInfoWindowOnClick(true);
         switch (evt.geometry.type) {
             case "point":
             case "multipoint":
