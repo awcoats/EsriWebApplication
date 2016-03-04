@@ -36,6 +36,10 @@ import HorizontalSlider = require("dijit/form/HorizontalSlider");
 import HomeButton = require("esri/dijit/HomeButton");
 import LocateButton = require("esri/dijit/LocateButton");
 import GraphicsHelper = require("./GraphicsHelper");
+import domClass = require("dojo/dom-class");
+import domConstruct = require("dojo/dom-construct");
+import Popup = require("esri/dijit/Popup");
+
 
 export = MapController;
 
@@ -51,7 +55,19 @@ class MapController {
         // required to make the dojo-type tags to be transformed for the window/ floating toolbar
         var root = document.getElementById("toolbox");
         parser.parse(root, {});
-       
+
+        //The popup is the default info window so you only need to create the popup and 
+        //assign it to the map if you want to change default properties. Here we are 
+        //noting that the specified title content should display in the header bar 
+        //and providing our own selection symbol for polygons.
+        var fill = new SimpleFillSymbol("solid", null, new Color("#A4CE67"));
+        var popup = new Popup({
+            fillSymbol: fill,
+            titleInBody: false
+        }, domConstruct.create("div", {},"",""));
+        //Add the dark theme which is customized further in the <style> tag at the top of this page
+        domClass.add(popup.domNode, "dark");
+
         console.log("MapController.start()");
         var point = new Point(-121.3719172, 37.9730027); // long, lat
         var mapOptions: esri.MapOptions = {};
@@ -79,15 +95,45 @@ class MapController {
         }, "LocateButton");
         geoLocate.startup();
 
-        var featureLayer = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2", {
-            mode: FeatureLayer.MODE_ONDEMAND,
-            outFields: ["*"]
-        });
-        //var featureLayer = new FeatureLayer("http://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/fbTrim/FeatureServer/0", {
+        //var featureLayer = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2", {
         //    mode: FeatureLayer.MODE_ONDEMAND,
         //    outFields: ["*"]
         //});
+        ////var featureLayer = new FeatureLayer("http://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/fbTrim/FeatureServer/0", {
+        ////    mode: FeatureLayer.MODE_ONDEMAND,
+        ////    outFields: ["*"]
+        ////});
 
+        //this.map.addLayer(featureLayer);
+
+        var template = new PopupTemplate({
+            title: "Boston Marathon 2013",
+            description: "{STATE_NAME}:  {Percent_Fi} of starters finished",
+            fieldInfos: [{ //define field infos so we can specify an alias
+                fieldName: "Number_Ent",
+                label: "Entrants"
+            }, {
+                    fieldName: "Number_Sta",
+                    label: "Starters"
+                }, {
+                    fieldName: "Number_Fin",
+                    label: "Finishers"
+                }],
+            mediaInfos: [{ //define the bar chart
+                caption: "",
+                type: "barchart",
+                value: {
+                    theme: "Dollar",
+                    fields: ["Number_Ent", "Number_Sta", "Number_Fin"]
+                }
+            }]
+        });
+
+        var featureLayer = new FeatureLayer("http://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/Boston_Marathon/FeatureServer/0", {
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            infoTemplate: template
+        });
         this.map.addLayer(featureLayer);
 
         this.addScaleBar();
