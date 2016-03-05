@@ -17,7 +17,8 @@ import MapController = require("./MapController");
 import normalizeUtils = require("esri/geometry/normalizeUtils");
 import esriConfig = require("esri/config");
 import array = require("dojo/_base/array");
-
+import Dialog = require("dijit/Dialog");
+import ColorPicker = require("esri/dijit/ColorPicker");
 export = GraphicsHelper;
 
 class GraphicsHelper {
@@ -29,6 +30,7 @@ class GraphicsHelper {
     ctxMenuForMap;
     selected;
     currentLocation;
+    styleDialog;
 
     constructor(public mapController2: MapController) {
         this.map = mapController2.map;
@@ -121,7 +123,34 @@ class GraphicsHelper {
         this.ctxMenuForGraphics.addChild(new MenuItem({
             label: "Style",
             onClick: () => {
-                alert("Not implemented2");
+                if (!this.styleDialog) {
+                    this.styleDialog = new Dialog({
+                        title: "Programmatic Dialog Creation",
+                        style: "width: 300px"
+                    });
+
+                    this.styleDialog.set("content", "<div id='styleDiv'></div>");
+                    this.styleDialog.show();
+                    var colorPicker = new ColorPicker({
+                        required: false, color: new Color("red"), colorsPerRow: 10, palette: null, recentColors: [], showRecentColors: false, showTransparencySlider: true
+
+                    }, "styleDiv");
+                    colorPicker.color = this.selected.symbol.color;
+
+                    colorPicker.on("color-change", (evt) => {
+                        //this.fillSymbol.setColor(evt.target.color);
+                        //var renderer = new SimpleRenderer(this.fillSymbol);
+                        //featureLayer.setRenderer(renderer);
+                        // featureLayer.redraw();
+                        this.selected.symbol.color = evt.target.color;
+                        this.selected.getLayer().refresh();
+                    });
+                    colorPicker.startup();
+
+                }
+                else {
+                    this.styleDialog.show();
+                }
             }
         }));
 
