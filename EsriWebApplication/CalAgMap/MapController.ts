@@ -5,17 +5,14 @@
 import esri = require("esri");
 import Map = require("esri/map");
 import Point = require("esri/geometry/Point");
-import Scalebar = require("esri/dijit/Scalebar");
 import BasemapGallery = require("esri/dijit/BasemapGallery");
 import Polygon = require("esri/geometry/Polygon");
 import Draw = require("esri/toolbars/draw")
-//import Edit = require("esri/toolbars/edit");
 import SimpleMarkerSymbol = require("esri/symbols/SimpleMarkerSymbol");
 import SimpleLineSymbol = require("esri/symbols/SimpleLineSymbol");
 import SimpleFillSymbol = require("esri/symbols/SimpleFillSymbol");
 import SimpleRenderer = require("esri/renderers/SimpleRenderer");
 import Graphic = require("esri/graphic");
-//import jsonUtils = require("esri/geometry/jsonUtils");
 import Color = require("esri/Color");
 import Button = require("dijit/form/Button");
 import on = require("dojo/on");
@@ -33,9 +30,8 @@ import ColorPicker = require("esri/dijit/ColorPicker");
 import SymbolStyler = require("esri/dijit/SymbolStyler");
 import OpenStreetMapLayer = require("esri/layers/OpenStreetMapLayer");
 import HorizontalSlider = require("dijit/form/HorizontalSlider");
-import HomeButton = require("esri/dijit/HomeButton");
-import LocateButton = require("esri/dijit/LocateButton");
 import GraphicsHelper = require("./GraphicsHelper");
+import MapHelper = require("./MapHelper");
 import domClass = require("dojo/dom-class");
 import domConstruct = require("dojo/dom-construct");
 import Popup = require("esri/dijit/Popup");
@@ -52,6 +48,7 @@ class MapController {
     }
 
     start() {
+      
         // required to make the dojo-type tags to be transformed for the window/ floating toolbar
         var root = document.getElementById("toolbox");
         parser.parse(root, {});
@@ -78,6 +75,7 @@ class MapController {
        
         this.map = new Map(this.mapDiv, mapOptions);
 
+        var mapHelper = new MapHelper(this.map);
         this.map.on("load", () => {
             console.log("map loaded");
             var graphicsHelper = new GraphicsHelper(this);
@@ -86,25 +84,10 @@ class MapController {
         });
 
         var basemap = new OpenStreetMapLayer();
-        //http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer
-
         this.map.addLayer(basemap);
-        this.addHomeButton();
-        var geoLocate = new LocateButton({
-            map: this.map
-        }, "LocateButton");
-        geoLocate.startup();
-
-        //var featureLayer = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2", {
-        //    mode: FeatureLayer.MODE_ONDEMAND,
-        //    outFields: ["*"]
-        //});
-        ////var featureLayer = new FeatureLayer("http://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/fbTrim/FeatureServer/0", {
-        ////    mode: FeatureLayer.MODE_ONDEMAND,
-        ////    outFields: ["*"]
-        ////});
-
-        //this.map.addLayer(featureLayer);
+        mapHelper.addHomeButton();
+        mapHelper.addLocateButton();
+       
 
         var template = new PopupTemplate({
             title: "Boston Marathon 2013",
@@ -137,37 +120,22 @@ class MapController {
         this.map.addLayer(featureLayer);
        
 
-        this.addScaleBar();
+        mapHelper.addScaleBar();
         this.addBasemapGallery();
         this.createGraphicsToolbar();
 
-       
-
-        //this.fillSymbol = new SimpleFillSymbol();
-        //this.fillSymbol.style = SimpleFillSymbol.STYLE_SOLID;
-        //this.fillSymbol.setColor(new Color([255, 255, 0, 0.5]));
-        //var renderer = new SimpleRenderer(this.fillSymbol);
-        //featureLayer.setRenderer(renderer);
-
         this.addLayerList();
-        
         this.addLegend(featureLayer);
 
         //var measurement = new Measurement({
         //    map: this.map
-        //}, dom.byId("measurementDiv"));
+        //},"measurementDiv");
         //measurement.startup();
       
         this.addLayerColorPicker(featureLayer);
-      
     }
    
-    private addHomeButton() {
-        var home = new HomeButton({
-            map: this.map
-        }, "HomeButton");
-        home.startup();
-    }
+   
 
     private addLayerColorPicker(featureLayer: FeatureLayer) {
     var myButton = new Button({
@@ -274,15 +242,7 @@ class MapController {
     }
 
 
-    private addScaleBar() {
-        var scalebar = new Scalebar({
-            map: this.map,
-            // "dual" displays both miles and kilmometers
-            // "english" is the default, which displays miles
-            // use "metric" for kilometers
-            scalebarUnit: "dual"
-        });
-    }
+   
 
     private addBasemapGallery() {
         //add the basemap gallery, in this case we'll display maps from ArcGIS.com including bing maps
