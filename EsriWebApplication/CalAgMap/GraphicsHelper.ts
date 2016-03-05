@@ -95,7 +95,7 @@ class GraphicsHelper {
                 if (this.selected.geometry.type !== "point") {
                     this.editToolbar.activate(Edit.EDIT_VERTICES, this.selected);
                 } else {
-                    alert("Not implemented");
+                    alert("Not implemented2");
                 }
             }
         }));
@@ -121,7 +121,7 @@ class GraphicsHelper {
         this.ctxMenuForGraphics.addChild(new MenuItem({
             label: "Style",
             onClick: () => {
-                alert("Not implemented");
+                alert("Not implemented2");
             }
         }));
 
