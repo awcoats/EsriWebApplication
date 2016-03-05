@@ -132,6 +132,7 @@ class GraphicsHelper {
             onClick: () => {
                 //var graphics = this.map.graphics[0];
                 //this.doBuffer(graphics);
+                alert("Not implemented");
             }
         }));
 

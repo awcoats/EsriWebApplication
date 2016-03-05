@@ -92,6 +92,7 @@
     <TypeScriptCompile Include="CalAgMap\GraphicsHelper.ts" />
     <TypeScriptCompile Include="CalAgMap\main.ts" />
     <TypeScriptCompile Include="CalAgMap\MapController.ts" />
+    <TypeScriptCompile Include="CalAgMap\MapHelper.ts" />
     <TypeScriptCompile Include="dijit.d.ts" />
     <TypeScriptCompile Include="dojo.d.ts" />
   </ItemGroup>
