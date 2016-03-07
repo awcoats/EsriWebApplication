@@ -8,11 +8,10 @@ import Map = require("esri/map");
 export = MapHelper;
 
 class MapHelper {
-    map: Map;
+  
 
-    constructor(  map: Map) {
-       
-        this.map = map;
+    constructor(public map: Map) {
+
     }
 
     public addHomeButton() {

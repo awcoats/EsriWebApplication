@@ -6,24 +6,24 @@ import Edit = require("esri/toolbars/edit");
 import Map = require("esri/map");
 import SimpleMarkerSymbol = require("esri/symbols/SimpleMarkerSymbol");
 import SimpleLineSymbol = require("esri/symbols/SimpleLineSymbol");
-import SimpleFillSymbol = require("esri/symbols/SimpleFillSymbol");
+//import SimpleFillSymbol = require("esri/symbols/SimpleFillSymbol");
 import Color = require("esri/Color");
 import Graphic = require("esri/graphic");
 import Point = require("esri/geometry/Point");
-import dom = require("dojo/dom");
-import BufferParameters = require("esri/tasks/BufferParameters");
+//import dom = require("dojo/dom");
+//import BufferParameters = require("esri/tasks/BufferParameters");
 //import GeometryService = require("esri/tasks/GeometryService");
 import MapController = require("./MapController");
-import normalizeUtils = require("esri/geometry/normalizeUtils");
-import esriConfig = require("esri/config");
-import array = require("dojo/_base/array");
+//import normalizeUtils = require("esri/geometry/normalizeUtils");
+//import esriConfig = require("esri/config");
+//import array = require("dojo/_base/array");
 import Dialog = require("dijit/Dialog");
 import ColorPicker = require("esri/dijit/ColorPicker");
 export = GraphicsHelper;
 
 class GraphicsHelper {
-    map: Map
-    mapController: MapController;
+    map: Map;
+    //mapController: MapController;
     // right click graphics editing toolbar
     editToolbar;
     ctxMenuForGraphics;
@@ -32,10 +32,9 @@ class GraphicsHelper {
     currentLocation;
     styleDialog;
 
-    constructor(public mapController2: MapController) {
-        this.map = mapController2.map;
-        this.mapController = mapController2;
-
+    constructor(public mapController: MapController) {
+        this.map = mapController.map;
+       
         //TODO - enable Geometry server.
         //esriConfig.defaults.geometryService = new GeometryService("http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
     }
@@ -85,7 +84,8 @@ class GraphicsHelper {
         }));
 
         this.ctxMenuForMap.startup();
-        //var container = dom.byId("mapContainer").get;
+       
+
         this.ctxMenuForMap.bindDomNode(this.map.container);
     }
     private createGraphicsMenu() {

@@ -68,7 +68,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Floating.html" />
     <Content Include="InfoPane.html" />
     <Content Include="packages.config" />
     <Content Include="Web.config" />
