@@ -1,7 +1,6 @@
-﻿/// <reference path="../arcgis-js-api.d.ts"/>
-/// <reference path="../dijit.d.ts"/>
-/// <reference path="../dojo.d.ts"/>
-
+﻿/// <reference path="../arcgis-js-api.d.ts" />
+/// <reference path="../dijit.d.ts" />
+/// <reference path="../dojo.d.ts" />
 import esri = require("esri");
 import Map = require("esri/map");
 import Point = require("esri/geometry/Point");
@@ -40,7 +39,7 @@ class MapController {
     }
 
     start() {
-      
+
         // required to make the dojo-type tags to be transformed for the window/ floating toolbar
         var root = document.getElementById("toolbox");
         parser.parse(root, {});
@@ -53,7 +52,7 @@ class MapController {
         var popup = new Popup({
             fillSymbol: fill,
             titleInBody: false
-        }, domConstruct.create("div", {},"",""));
+        }, domConstruct.create("div", {}, "", ""));
         //Add the dark theme which is customized further in the <style> tag at the top of this page
         domClass.add(popup.domNode, "dark");
 
@@ -64,7 +63,7 @@ class MapController {
         mapOptions.center = point;
         mapOptions.zoom = 6;
 
-       
+
         this.map = new Map(this.mapDiv, mapOptions);
 
         var mapHelper = new MapHelper(this.map);
@@ -79,29 +78,35 @@ class MapController {
         this.map.addLayer(basemap);
         mapHelper.addHomeButton();
         mapHelper.addLocateButton();
-       
+
 
         var template = new PopupTemplate({
             title: "Boston Marathon 2013",
             description: "{STATE_NAME}:  {Percent_Fi} of starters finished",
-            fieldInfos: [{ //define field infos so we can specify an alias
-                fieldName: "Number_Ent",
-                label: "Entrants"
-            }, {
+            fieldInfos: [
+                {
+                    //define field infos so we can specify an alias
+                    fieldName: "Number_Ent",
+                    label: "Entrants"
+                }, {
                     fieldName: "Number_Sta",
                     label: "Starters"
                 }, {
                     fieldName: "Number_Fin",
                     label: "Finishers"
-                }],
-            mediaInfos: [{ //define the bar chart
-                caption: "",
-                type: "barchart",
-                value: {
-                    theme: "Dollar",
-                    fields: ["Number_Ent", "Number_Sta", "Number_Fin"]
                 }
-            }]
+            ],
+            mediaInfos: [
+                {
+                    //define the bar chart
+                    caption: "",
+                    type: "barchart",
+                    value: {
+                        theme: "Dollar",
+                        fields: ["Number_Ent", "Number_Sta", "Number_Fin"]
+                    }
+                }
+            ]
         });
 
         var featureLayer = new FeatureLayer("http://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/Boston_Marathon/FeatureServer/0", {
@@ -110,7 +115,7 @@ class MapController {
             infoTemplate: template
         });
         this.map.addLayer(featureLayer);
-       
+
 
         mapHelper.addScaleBar();
         this.addBasemapGallery();
@@ -123,20 +128,19 @@ class MapController {
         //    map: this.map
         //},"measurementDiv");
         //measurement.startup();
-      
+
         this.addLayerColorPicker(featureLayer);
     }
-   
-   
+
 
     private addLayerColorPicker(featureLayer: FeatureLayer) {
-    var myButton = new Button({
+        var myButton = new Button({
             label: "Apply",
-            onClick: function () {
-              
+            onClick: function() {
+
             }
         }, dom.byId("symbolStylerApply")).startup();
-        
+
         //var colorPicker = new ColorPicker({
         //    required: false, color: new Color("red"), colorsPerRow: 10, palette: null, recentColors: [], showRecentColors: false, showTransparencySlider: true
 
@@ -183,15 +187,15 @@ class MapController {
             map: this.map,
             layers: this.map.getLayersVisibleAtScale()
         }, "layerList");
-        myWidget.startup()
+        myWidget.startup();
     }
 
 
     private createGraphicsToolbar() {
         this.toolbar = new Draw(this.map);
         this.toolbar.on("draw-end", (evt) => {
-           
-            this.addToMap(this.toolbar, evt)
+
+            this.addToMap(this.toolbar, evt);
         });
 
         on(dom.byId("info"), "click", (evt) => {
@@ -203,10 +207,10 @@ class MapController {
             this.map.setInfoWindowOnClick(false);
             this.toolbar.activate(tool);
         });
-       
+
         var myButton = new Button({
             label: "Clear",
-            onClick:  () =>{
+            onClick: () => {
                 this.map.graphics.clear();
             }
         }, dom.byId("ClearGraphics")).startup();
@@ -216,25 +220,23 @@ class MapController {
         var symbol;
         toolbar.deactivate();
         this.map.enableMapNavigation();
-         this.map.setInfoWindowOnClick(true);
+        this.map.setInfoWindowOnClick(true);
         switch (evt.geometry.type) {
-            case "point":
-            case "multipoint":
-                symbol = new SimpleMarkerSymbol();
-                break;
-            case "polyline":
-                symbol = new SimpleLineSymbol();
-                break;
-            default:
-                symbol = new SimpleFillSymbol();
-                break;
+        case "point":
+        case "multipoint":
+            symbol = new SimpleMarkerSymbol();
+            break;
+        case "polyline":
+            symbol = new SimpleLineSymbol();
+            break;
+        default:
+            symbol = new SimpleFillSymbol();
+            break;
         }
         var graphic = new Graphic(evt.geometry, symbol);
         this.map.graphics.add(graphic);
     }
 
-
-   
 
     private addBasemapGallery() {
         //add the basemap gallery, in this case we'll display maps from ArcGIS.com including bing maps
@@ -244,7 +246,7 @@ class MapController {
         }, "basemapGallery");
         basemapGallery.startup();
 
-        basemapGallery.on("error", function (msg) {
+        basemapGallery.on("error", function(msg) {
             console.log("basemap gallery error:  ", msg);
         });
 

@@ -1,5 +1,4 @@
-﻿import MapController = require("./MapController");
-import HomeButton = require("esri/dijit/HomeButton");
+﻿import HomeButton = require("esri/dijit/HomeButton");
 import LocateButton = require("esri/dijit/LocateButton");
 import Scalebar = require("esri/dijit/Scalebar");
 
@@ -8,27 +7,27 @@ import Map = require("esri/map");
 export = MapHelper;
 
 class MapHelper {
-  
+
 
     constructor(public map: Map) {
 
     }
 
-    public addHomeButton() {
+    addHomeButton() {
         var home = new HomeButton({
             map: this.map
         }, "HomeButton");
         home.startup();
     }
 
-    public addLocateButton() {
+    addLocateButton() {
         var geoLocate = new LocateButton({
             map: this.map
         }, "LocateButton");
         geoLocate.startup();
     }
 
-    public addScaleBar() {
+    addScaleBar() {
         var scalebar = new Scalebar({
             map: this.map,
             // "dual" displays both miles and kilmometers

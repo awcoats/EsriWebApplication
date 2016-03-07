@@ -13,7 +13,7 @@ import Point = require("esri/geometry/Point");
 //import dom = require("dojo/dom");
 //import BufferParameters = require("esri/tasks/BufferParameters");
 //import GeometryService = require("esri/tasks/GeometryService");
-import MapController = require("./MapController");
+import MapController = require("MapController");
 //import normalizeUtils = require("esri/geometry/normalizeUtils");
 //import esriConfig = require("esri/config");
 //import array = require("dojo/_base/array");
@@ -34,25 +34,24 @@ class GraphicsHelper {
 
     constructor(public mapController: MapController) {
         this.map = mapController.map;
-       
+
         //TODO - enable Geometry server.
         //esriConfig.defaults.geometryService = new GeometryService("http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
     }
 
-    public createToolbarAndContextMenu() {
+    createToolbarAndContextMenu() {
 
         // Create and setup editing tools
         this.editToolbar = new Edit(this.map);
 
         this.map.on("click", (evt) => {
-         
+
             this.editToolbar.deactivate();
         });
         //this.editToolbar.on("draw-end", this.doBuffer);
         this.createMapMenu();
         this.createGraphicsMenu();
     }
-
 
 
     private createMapMenu() {
@@ -84,10 +83,11 @@ class GraphicsHelper {
         }));
 
         this.ctxMenuForMap.startup();
-       
+
 
         this.ctxMenuForMap.bindDomNode(this.map.container);
     }
+
     private createGraphicsMenu() {
         // Creates right-click context menu for GRAPHICS
         this.ctxMenuForGraphics = new Menu({});
@@ -132,7 +132,13 @@ class GraphicsHelper {
                     this.styleDialog.set("content", "<div id='styleDiv'></div>");
                     this.styleDialog.show();
                     var colorPicker = new ColorPicker({
-                        required: false, color: new Color("red"), colorsPerRow: 10, palette: null, recentColors: [], showRecentColors: false, showTransparencySlider: true
+                        required: false,
+                        color: new Color("red"),
+                        colorsPerRow: 10,
+                        palette: null,
+                        recentColors: [],
+                        showRecentColors: false,
+                        showTransparencySlider: true
 
                     }, "styleDiv");
                     colorPicker.color = this.selected.symbol.color;
@@ -147,8 +153,7 @@ class GraphicsHelper {
                     });
                     colorPicker.startup();
 
-                }
-                else {
+                } else {
                     this.styleDialog.show();
                 }
             }
@@ -254,16 +259,16 @@ class GraphicsHelper {
     private getMapPointFromMenuPosition(box) {
         var x = box.x, y = box.y;
         switch (box.corner) {
-            case "TR":
-                x += box.w;
-                break;
-            case "BL":
-                y += box.h;
-                break;
-            case "BR":
-                x += box.w;
-                y += box.h;
-                break;
+        case "TR":
+            x += box.w;
+            break;
+        case "BL":
+            y += box.h;
+            break;
+        case "BR":
+            x += box.w;
+            y += box.h;
+            break;
         }
 
         var screenPoint = new Point(x - this.map.position.x, y - this.map.position.y);
